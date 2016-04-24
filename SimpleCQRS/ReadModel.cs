@@ -4,12 +4,6 @@ using dddlib.Projections;
 
 namespace SimpleCQRS
 {
-    public interface IReadModelFacade
-    {
-        IEnumerable<InventoryItemListDto> GetInventoryItems();
-        InventoryItemDetailsDto GetInventoryItemDetails(Guid id);
-    }
-
     public class InventoryItemDetailsDto
     {
         public Guid Id;

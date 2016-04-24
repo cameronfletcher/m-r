@@ -7,12 +7,12 @@ namespace SimpleCQRS
     {
         private Guid _id;
 
-        private void Apply(InventoryItemCreated e)
+        private void Handle(InventoryItemCreated e)
         {
             _id = e.Id;
         }
 
-        private void Apply(InventoryItemDeactivated e)
+        private void Handle(InventoryItemDeactivated e)
         {
             EndLifecycle();
         }
