@@ -1,10 +1,15 @@
-﻿using SimpleCQRS;
+﻿using System;
+using dddlib.Projections.Memory;
+using SimpleCQRS;
 
 namespace CQRSGui
 {
-    public static class ServiceLocator
+    internal static class ServiceLocator
     {
-        public static FakeBus Bus { get; set; }
-       
+        public static Microbus Bus { get; set; }
+
+        public static MemoryRepository<Guid, InventoryItemDetailsDto> DetailsRepository { get; set; }
+
+        public static MemoryRepository<Guid, InventoryItemListDto> ListRepository { get; set; }
     }
 }

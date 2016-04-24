@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
+using dddlib.Projections;
+using dddlib.Projections.Memory;
 using SimpleCQRS;
 
 namespace CQRSGui.Controllers
@@ -7,25 +10,28 @@ namespace CQRSGui.Controllers
     [HandleError]
     public class HomeController : Controller
     {
-        private FakeBus _bus;
-        private ReadModelFacade _readmodel;
+        private Microbus _bus;
+
+        private readonly MemoryRepository<Guid, InventoryItemDetailsDto> detailsRepository;
+        private readonly MemoryRepository<Guid, InventoryItemListDto> listRepository;
 
         public HomeController()
         {
             _bus = ServiceLocator.Bus;
-            _readmodel = new ReadModelFacade();
+            detailsRepository = ServiceLocator.DetailsRepository;
+            listRepository = ServiceLocator.ListRepository;
         }
 
         public ActionResult Index()
         {
-            ViewData.Model = _readmodel.GetInventoryItems();
+            ViewData.Model = listRepository.GetAll().Select(kvp => kvp.Value);
 
             return View();
         }
 
         public ActionResult Details(Guid id)
         {
-            ViewData.Model = _readmodel.GetInventoryItemDetails(id);
+            ViewData.Model = detailsRepository.Get(id);
             return View();
         }
 
@@ -44,7 +50,7 @@ namespace CQRSGui.Controllers
 
         public ActionResult ChangeName(Guid id)
         {
-            ViewData.Model = _readmodel.GetInventoryItemDetails(id);
+            ViewData.Model = detailsRepository.Get(id);
             return View();
         }
 
@@ -59,7 +65,7 @@ namespace CQRSGui.Controllers
 
         public ActionResult Deactivate(Guid id)
         {
-            ViewData.Model = _readmodel.GetInventoryItemDetails(id);
+            ViewData.Model = detailsRepository.Get(id);
             return View();
         }
 
@@ -72,7 +78,7 @@ namespace CQRSGui.Controllers
 
         public ActionResult CheckIn(Guid id)
         {
-            ViewData.Model = _readmodel.GetInventoryItemDetails(id);
+            ViewData.Model = detailsRepository.Get(id);
             return View();
         }
 
@@ -85,7 +91,7 @@ namespace CQRSGui.Controllers
 
         public ActionResult Remove(Guid id)
         {
-            ViewData.Model = _readmodel.GetInventoryItemDetails(id);
+            ViewData.Model = detailsRepository.Get(id);
             return View();
         }
 
