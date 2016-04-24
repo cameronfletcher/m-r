@@ -1,12 +1,13 @@
 ﻿using System;
+using dddlib.Persistence;
 
 namespace SimpleCQRS
 {
     public class InventoryCommandHandlers
     {
-        private readonly IRepository<InventoryItem> _repository;
+        private readonly IEventStoreRepository _repository;
 
-        public InventoryCommandHandlers(IRepository<InventoryItem> repository)
+        public InventoryCommandHandlers(IEventStoreRepository repository)
         {
             _repository = repository;
         }
@@ -14,35 +15,35 @@ namespace SimpleCQRS
         public void Handle(CreateInventoryItem message)
         {
             var item = new InventoryItem(message.InventoryItemId, message.Name);
-            _repository.Save(item, -1);
+            _repository.Save(item);
         }
 
         public void Handle(DeactivateInventoryItem message)
         {
-            var item = _repository.GetById(message.InventoryItemId);
+            var item = _repository.Load<InventoryItem>(message.InventoryItemId);
             item.Deactivate();
-            _repository.Save(item, message.OriginalVersion);
+            _repository.Save(item);
         }
 
         public void Handle(RemoveItemsFromInventory message)
         {
-            var item = _repository.GetById(message.InventoryItemId);
+            var item = _repository.Load<InventoryItem>(message.InventoryItemId);
             item.Remove(message.Count);
-            _repository.Save(item, message.OriginalVersion);
+            _repository.Save(item);
         }
 
         public void Handle(CheckInItemsToInventory message)
         {
-            var item = _repository.GetById(message.InventoryItemId);
+            var item = _repository.Load<InventoryItem>(message.InventoryItemId);
             item.CheckIn(message.Count);
-            _repository.Save(item, message.OriginalVersion);
+            _repository.Save(item);
         }
 
         public void Handle(RenameInventoryItem message)
         {
-            var item = _repository.GetById(message.InventoryItemId);
+            var item = _repository.Load<InventoryItem>(message.InventoryItemId);
             item.ChangeName(message.NewName);
-            _repository.Save(item, message.OriginalVersion);
+            _repository.Save(item);
         }
     }
 }

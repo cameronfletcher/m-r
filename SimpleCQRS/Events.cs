@@ -1,61 +1,33 @@
 using System;
 namespace SimpleCQRS
 {
-    public class Event : Message
+    public class InventoryItemDeactivated
     {
-        public int Version;
-    }
-    
-    public class InventoryItemDeactivated : Event {
-        public readonly Guid Id;
-
-        public InventoryItemDeactivated(Guid id)
-        {
-            Id = id;
-        }
+        public Guid Id { get; set; }
     }
 
-    public class InventoryItemCreated : Event {
-        public readonly Guid Id;
-        public readonly string Name;
-        public InventoryItemCreated(Guid id, string name) {
-            Id = id;
-            Name = name;
-        }
-    }
-
-    public class InventoryItemRenamed : Event
+    public class InventoryItemCreated
     {
-        public readonly Guid Id;
-        public readonly string NewName;
- 
-        public InventoryItemRenamed(Guid id, string newName)
-        {
-            Id = id;
-            NewName = newName;
-        }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
     }
 
-    public class ItemsCheckedInToInventory : Event
+    public class InventoryItemRenamed
     {
-        public Guid Id;
-        public readonly int Count;
- 
-        public ItemsCheckedInToInventory(Guid id, int count) {
-            Id = id;
-            Count = count;
-        }
+        public Guid Id { get; set; }
+        public string NewName { get; set; }
     }
 
-    public class ItemsRemovedFromInventory : Event
+    public class ItemsCheckedInToInventory
     {
-        public Guid Id;
-        public readonly int Count;
- 
-        public ItemsRemovedFromInventory(Guid id, int count) {
-            Id = id;
-            Count = count;
-        }
+        public Guid Id { get; set; }
+        public int Count { get; set; }
+    }
+
+    public class ItemsRemovedFromInventory
+    {
+        public Guid Id { get; set; }
+        public int Count { get; set; }
     }
 }
 
